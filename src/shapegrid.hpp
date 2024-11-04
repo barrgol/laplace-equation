@@ -2,6 +2,7 @@
 #include <cmath>
 #include <functional>
 #include <SFML/Graphics.hpp>
+#include "colors.hpp"
 
 class ShapeGrid
 {
@@ -14,30 +15,6 @@ public:
 	const float CELL_WIDTH;
 	const float CELL_HEIGHT;
 
-	static sf::Color RED_BLUE(float val) {
-		return {
-			(sf::Uint8) (-(val - 1) / 2.0f * 255),
-			0,
-			(sf::Uint8) ((val + 1) / 2.0f * 255)
-		};
-	}
-
-	static sf::Color GREEN_BLUE(float val) {
-		return {
-			0,
-			(sf::Uint8)(-(val - 1) / 2.0f * 255),
-			(sf::Uint8)((val + 1) / 2.0f * 255)
-		};
-	}
-
-	static sf::Color BLACK_WHITE(float val) {
-		return {
-			(sf::Uint8)((val + 1) / 2.0f * 255),
-			(sf::Uint8)((val + 1) / 2.0f * 255),
-			(sf::Uint8)((val + 1) / 2.0f * 255)
-		};
-	}
-
 private:
 	std::vector<std::vector<sf::RectangleShape>> cells;
 	std::function<sf::Color(float)> cmap;
@@ -47,7 +24,7 @@ private:
 
 public:
 	ShapeGrid(sf::Vector2i dim, sf::Vector2f pos, sf::Vector2f size,
-		      std::function<sf::Color(float)> cmap=RED_BLUE)
+		      std::function<sf::Color(float)> cmap= Gradient::RED_BLUE)
 		: dim(dim)
 		, size(size)
 		, pos(pos)
@@ -72,6 +49,7 @@ public:
 			for (int j = 0; j < dim.x; j++) {
 				cells[i][j].setFillColor(cmap(values[i][j]));
 				context.draw(cells[i][j]);
+
 			}
 		}
 	}

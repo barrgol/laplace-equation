@@ -1,12 +1,14 @@
 #include <SFML/Graphics.hpp>
 #include "configuration.hpp"
 #include "shapegrid.hpp"
+#include "arraygrid.hpp"
+#include "colors.hpp"
 
-const sf::Vector2i dim{ 100, 100 };
+const sf::Vector2i dim{ 500, 500 };
 
-const float k = 0.9;
+const float k = 0.5;
 const float w = 0.5;
-const sf::Vector2i center{ 50, 50 };
+const sf::Vector2i center{ dim.x / 2, dim.y / 2 };
 
 float r(sf::Vector2i pos) {    
     int i = pos.x - center.x;
@@ -23,7 +25,11 @@ int main()
     auto window = sf::RenderWindow{ { conf::WINDOW_SIZE.x, conf::WINDOW_SIZE.y }, "Application" };
     window.setFramerateLimit(conf::MAX_FRAMERATE);
 
-    ShapeGrid sg{ dim, {0.0f, 0.0f}, conf::WINDOW_SIZE_F, ShapeGrid::BLACK_WHITE };
+    //ShapeGrid grid{ dim, {0.0f, 0.0f}, conf::WINDOW_SIZE_F, Gradient::BLACK_WHITE };
+    ArrayGrid grid{ dim, {0.0f, 0.0f}, conf::WINDOW_SIZE_F, Gradient::RED_BLUE };
+
+    // create an array of 3 vertices that define a triangle primitive
+    sf::VertexArray triangle(sf::Triangles, 6);
 
     int t = 0;
     while (window.isOpen())
@@ -36,14 +42,17 @@ int main()
             }
         }
 
-        for (int i = 0; i < sg.dim.y; i++) {
-            for (int j = 0; j < sg.dim.x; j++) {
-                sg.values[i][j] = u(r({ i, j }), t);
+        for (int i = 0; i < grid.dim.y; i++) {
+            for (int j = 0; j < grid.dim.x; j++) {
+                grid.values[i][j] = u(r({ i, j }), t);
             }
         }
 
-        sg.render(window);
-        
+        //sg.render(window);
+        grid.render(window);
+
+        window.draw(triangle);
+
         window.display();
 
         t += 1;
