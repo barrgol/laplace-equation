@@ -2,16 +2,16 @@
 #include "configuration.hpp"
 #include "shapegrid.hpp"
 
-const sf::Vector2i dim{ 200, 200 };
+const sf::Vector2i dim{ 100, 100 };
 
-const float k = 0.1;
-const float w = 0.1;
+const float k = 0.9;
+const float w = 0.5;
 const sf::Vector2i center{ 50, 50 };
 
-float r(sf::Vector2i pos) {
+float r(sf::Vector2i pos) {    
     int i = pos.x - center.x;
     int j = pos.y - center.y;
-    return std::sqrtf(i * i + j * j);
+    return std::sqrt(i * i + j * j);
 }
 
 float u(float r, float t) {
@@ -23,7 +23,7 @@ int main()
     auto window = sf::RenderWindow{ { conf::WINDOW_SIZE.x, conf::WINDOW_SIZE.y }, "Application" };
     window.setFramerateLimit(conf::MAX_FRAMERATE);
 
-    ShapeGrid sg{ dim, {0.0f, 0.0f}, {1200.0f, 1200.0f} };
+    ShapeGrid sg{ dim, {0.0f, 0.0f}, conf::WINDOW_SIZE_F, ShapeGrid::BLACK_WHITE };
 
     int t = 0;
     while (window.isOpen())
