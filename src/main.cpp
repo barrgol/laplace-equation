@@ -1,4 +1,6 @@
 #include <SFML/Graphics.hpp>
+#include <iostream>
+#include <format>
 #include "configuration.hpp"
 #include "shapegrid.hpp"
 #include "arraygrid.hpp"
@@ -25,13 +27,31 @@ int main()
     auto window = sf::RenderWindow{ { conf::WINDOW_SIZE.x, conf::WINDOW_SIZE.y }, "Application" };
     window.setFramerateLimit(conf::MAX_FRAMERATE);
 
-    //ShapeGrid grid{ dim, {0.0f, 0.0f}, conf::WINDOW_SIZE_F, Gradient::BLACK_WHITE };
-    ArrayGrid grid{ dim, {0.0f, 0.0f}, conf::WINDOW_SIZE_F, Gradient::RED_BLUE };
+    //ShapeGrid grid{ dim, {0.0f, 0.0f}, conf::WINDOW_SIZE_F, Gradient::GREEN_BLUE };
+    ArrayGrid grid{ dim, {0.0f, 0.0f}, conf::WINDOW_SIZE_F, Gradient::GREEN_BLUE };
 
-    // create an array of 3 vertices that define a triangle primitive
-    sf::VertexArray triangle(sf::Triangles, 6);
+    // Load the font
+    sf::Font font;
+    if (!font.loadFromFile("res/arialbd.ttf"))
+    {
+        std::cerr << "Error: Could not open 'arialbd.ttf'" << std::endl;
+        return EXIT_FAILURE;
+    }
 
+    // Text that displays the FPS
+    int nframes = 0;
+    sf::Text fpsText(std::format("FPS = {}", nframes), font);
+
+    fpsText.setCharacterSize(24);
+    fpsText.setColor(sf::Color::Yellow);
+    fpsText.setPosition(sf::Vector2f{ 20.0f, conf::WINDOW_SIZE_F.y - 50.0f });
+
+    // Discrete time
     int t = 0;
+
+    // Create a clock to track FPS
+    sf::Clock clock;
+
     while (window.isOpen())
     {
         for (auto event = sf::Event(); window.pollEvent(event);)
@@ -48,12 +68,19 @@ int main()
             }
         }
 
-        //sg.render(window);
         grid.render(window);
-
-        window.draw(triangle);
+        window.draw(fpsText);
 
         window.display();
+
+        nframes += 1;
+
+        // Check elapsed time
+        if (clock.getElapsedTime().asSeconds() >= 1.0) {
+            fpsText.setString(std::format("FPS = {}", nframes));
+            nframes = 0;
+            clock.restart();
+        }
 
         t += 1;
     }
