@@ -6,13 +6,13 @@
 #include "arraygrid.hpp"
 #include "colors.hpp"
 
-const sf::Vector2i dim{ 500, 500 };
+const sf::Vector2i dim{ 600, 600 };
 
 const float k = 0.5;
-const float w = 0.5;
+const float w = 1.0;
 const sf::Vector2i center{ dim.x / 2, dim.y / 2 };
 
-float r(sf::Vector2i pos) {    
+float r(sf::Vector2i pos) {
     int i = pos.x - center.x;
     int j = pos.y - center.y;
     return std::sqrt(i * i + j * j);
@@ -40,11 +40,12 @@ int main()
 
     // Text that displays the FPS
     int nframes = 0;
-    sf::Text fpsText(std::format("FPS = {}", nframes), font);
+    sf::Text fpsText(std::format("FPS: {}", nframes), font);
 
-    fpsText.setCharacterSize(24);
+    fpsText.setCharacterSize(36);
     fpsText.setColor(sf::Color::Yellow);
-    fpsText.setPosition(sf::Vector2f{ 20.0f, conf::WINDOW_SIZE_F.y - 50.0f });
+    fpsText.setStyle(sf::Text::Bold);
+    fpsText.setPosition(sf::Vector2f{ 20.0f, 20.0f });
 
     // Discrete time
     int t = 0;
@@ -77,7 +78,7 @@ int main()
 
         // Check elapsed time
         if (clock.getElapsedTime().asSeconds() >= 1.0) {
-            fpsText.setString(std::format("FPS = {}", nframes));
+            fpsText.setString(std::format("FPS: {}", nframes));
             nframes = 0;
             clock.restart();
         }
