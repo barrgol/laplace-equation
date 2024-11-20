@@ -15,9 +15,19 @@ file(GLOB_RECURSE source_files
     "src/*.cpp"
 )
 
+file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/data)
+file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/res)
+file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/src)
+file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/out)
+file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/out/bin)
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/out)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/out)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/out)
+
 set(SOURCES ${source_files})
 
-add_executable(${PROJECT_NAME} ${SOURCES} "src/arraygrid.hpp")
+add_executable(${PROJECT_NAME} ${SOURCES} "src/arraygrid.hpp" "src/csvwriter.hpp")
 target_include_directories(${PROJECT_NAME} PRIVATE "src")
 target_link_libraries(${PROJECT_NAME} PRIVATE sfml-graphics)
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)

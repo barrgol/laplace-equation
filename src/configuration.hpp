@@ -18,7 +18,7 @@ namespace conf
 	// ********************************
 	
 	// Grid dimension
-	const int N = 300;
+	const int N = 200;
 
 	// Wall boundaries where temperature rules will change, keep constant to avoid recalculation
 	const int INNER_TOP = 3.0f / 9 * N;
