@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "colors.hpp"
+#include <functional>
+#include "gradient.hpp"
 
 class ArrayGrid
 {

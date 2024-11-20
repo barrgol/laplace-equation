@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(GridVis LANGUAGES CXX)
+project(Laplace LANGUAGES CXX)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
@@ -17,7 +17,7 @@ file(GLOB_RECURSE source_files
 
 set(SOURCES ${source_files})
 
-add_executable(${PROJECT_NAME} ${SOURCES} "src/ShapeGrid.hpp" "src/arraygrid.hpp")
+add_executable(${PROJECT_NAME} ${SOURCES} "src/arraygrid.hpp")
 target_include_directories(${PROJECT_NAME} PRIVATE "src")
 target_link_libraries(${PROJECT_NAME} PRIVATE sfml-graphics)
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
