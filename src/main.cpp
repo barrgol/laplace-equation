@@ -10,7 +10,7 @@
 #include "elements.hpp"
 
 // Turn on this flag to switch from generating .csv files to runtime visualization using SFML
-const bool VISUAL = false;
+const bool VISUAL = true;
 
 int main()
 {
@@ -33,7 +33,7 @@ int main()
     bool paused = true;
 
     // Helper struct for handling events
-    AppState state{ grid.values, isConst, paused };
+    AppState state{ grid.values, isConst, nsteps, paused };
 
     if (VISUAL) {
         // **********************************

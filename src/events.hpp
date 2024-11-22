@@ -6,6 +6,7 @@
 struct AppState {
     std::vector<std::vector<float>>& values;
     std::vector<std::vector<bool>>& isConst;
+    int& nsteps;
     bool& paused;
 };
 
@@ -26,6 +27,7 @@ void processEvents(sf::Window& window, AppState& state) {
             case sf::Keyboard::R:
                 Laplace::init(state.values, state.isConst);
                 state.paused = true;
+                state.nsteps = 0;
                 break;
             case sf::Keyboard::S:
                 state.paused = !state.paused;
