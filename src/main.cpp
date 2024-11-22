@@ -5,10 +5,12 @@
 #include "arraygrid.hpp"
 #include "gradient.hpp"
 #include "simulation.hpp"
-#include "csvwriter.hpp"
+#include "filewriter.hpp"
+#include "events.hpp"
+#include "elements.hpp"
 
 // Turn on this flag to switch from generating .csv files to runtime visualization using SFML
-const bool VISUAL = true;
+const bool VISUAL = false;
 
 int main()
 {
@@ -27,6 +29,12 @@ int main()
     // Flag that checks if the simulation converged
     bool converged = false;
 
+    // Flag that denotes that the simulation is stopped
+    bool paused = true;
+
+    // Helper struct for handling events
+    AppState state{ grid.values, isConst, paused };
+
     if (VISUAL) {
         // **********************************
         // *** Runtime visualization mode ***
@@ -38,51 +46,40 @@ int main()
 
         // Load the font
         sf::Font font;
-        if (!font.loadFromFile("res/arialbd.ttf"))
-        {
-            std::cerr << "Error: Could not open 'arialbd.ttf'" << std::endl;
-            return EXIT_FAILURE;
-        }
+        elements::loadFont(font);
 
         // Text that displays the FPS
         int nframes = 0;
         sf::Text fpsText(std::format("FPS: {}", nframes), font);
-
-        fpsText.setCharacterSize(36);
-        fpsText.setColor(sf::Color::Yellow);
-        fpsText.setStyle(sf::Text::Bold);
-        fpsText.setPosition(sf::Vector2f{ 20.0f, 20.0f });
+        elements::fpsTextStyle(fpsText);
 
         // Text that display the number of steps
         sf::Text stepsText(std::format("Simulation steps: {}", nsteps), font);
+        elements::stepsTextStyle(stepsText);
 
-        stepsText.setCharacterSize(24);
-        stepsText.setColor(sf::Color::Yellow);
-        stepsText.setStyle(sf::Text::Bold);
-        stepsText.setPosition(sf::Vector2f{ 20.0f, conf::WINDOW_SIZE_F.y - 40.0f });
+        // Texts that display usage instructions
+        sf::Text instructionText("Press 'S' to start/stop\nPress 'R' to restart", font);
+        elements::instructionTextStyle(instructionText);
 
         // Create a clock to track FPS
         sf::Clock clock;
 
         while (window.isOpen())
         {
-            // Check if the "X" was clicked, close the window if it was
-            for (auto event = sf::Event(); window.pollEvent(event);)
-            {
-                if (event.type == sf::Event::Closed)
-                {
-                    window.close();
-                }
-            }
+            // Process events, P to pause, R to restart, Esc to close
+            processEvents(window, state);
 
             // Continue updating untill convergence
             if (!converged) {
                 // Store the maximal update in the current iteration
-                float maxUpdate = Laplace::update(grid.values, isConst);
+                float maxUpdate = FLT_MAX;
+                if (!paused) {
+                    maxUpdate = Laplace::update(grid.values, isConst);
 
-                // Update the counters
-                nframes += 1;
-                nsteps += 1;
+                    // Update the counters
+                    nframes += 1;
+                    nsteps += 1;
+                }
 
                 // Check if the simulation converged
                 if (maxUpdate < conf::EPS) {
@@ -108,6 +105,7 @@ int main()
                 grid.render(window);
                 window.draw(fpsText);
                 window.draw(stepsText);
+                window.draw(instructionText);
 
                 // Display everything to the screen
                 window.display();
@@ -122,7 +120,7 @@ int main()
         std::cout << "Timestep = " << nsteps << std::endl;
 
         // Write the initial data to a .csv file
-        CSV::write(CSV::generateFilename(0), grid.values, "Temperature");
+        CSV::write(CSV::generateFilename(0), grid.values, "temperature");
 
         // Continue updating untill convergence
         while (!converged)
@@ -138,7 +136,7 @@ int main()
             std::cout << "Timestep = " << nsteps << std::endl;
 
             // Write the data to a .csv file
-            CSV::write(CSV::generateFilename(nsteps), grid.values, "Temperature");
+            CSV::write(CSV::generateFilename(nsteps), grid.values, "temperature");
 
             // Check if the simulation converged
             if (maxUpdate < conf::EPS) {

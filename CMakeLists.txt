@@ -27,7 +27,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/out)
 
 set(SOURCES ${source_files})
 
-add_executable(${PROJECT_NAME} ${SOURCES} "src/arraygrid.hpp" "src/csvwriter.hpp")
+add_executable(${PROJECT_NAME} ${SOURCES} "src/arraygrid.hpp" "src/filewriter.hpp" "src/events.hpp" "src/elements.hpp")
 target_include_directories(${PROJECT_NAME} PRIVATE "src")
 target_link_libraries(${PROJECT_NAME} PRIVATE sfml-graphics)
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)

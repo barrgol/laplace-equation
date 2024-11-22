@@ -31,8 +31,8 @@ namespace CSV {
 
         // Write the data
         for (size_t i = 0; i < conf::N; i++) {
-            for (size_t j = 0; j <= conf::N / 2; j++) {
-                file << i << ", " << j << ", " << data[i][j] << "\n";
+            for (size_t j = 0; j < conf::N; j++) {
+                file << j << ", " << i << ", " << data[i][j] << "\n";
             }
         }
 
