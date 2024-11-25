@@ -7,7 +7,7 @@ namespace conf
 	// ********************************
 
 	// Visual size of the window (in two formats for convenience)
-	sf::Vector2u const WINDOW_SIZE = { 1200u, 1200u };
+	sf::Vector2u const WINDOW_SIZE = { 800u, 800u };
 	sf::Vector2f const WINDOW_SIZE_F = static_cast<sf::Vector2f>(WINDOW_SIZE);
 
 	// Maximal framerate

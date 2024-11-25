@@ -33,7 +33,7 @@ int main()
     bool paused = true;
 
     // Helper struct for handling events
-    AppState state{ grid.values, isConst, nsteps, paused };
+    AppState state{ grid.values, isConst, nsteps, paused, converged };
 
     if (VISUAL) {
         // **********************************
